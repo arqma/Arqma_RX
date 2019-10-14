@@ -70,7 +70,7 @@ int main() {
 	//std::cout << "Allocating randomx_cache..." << std::endl;
 	cache = randomx_alloc_cache(RANDOMX_FLAG_DEFAULT);
 
-	runTest("Cache initialization", RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"),	[]() {
+	runTest("Cache initialization", RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"),	[]() {
 		initCache("test key 000");
 		uint64_t* cacheMemory = (uint64_t*)cache->memory;
 		assert(cacheMemory[0] == 0x191e0e1d23c02186);
@@ -125,7 +125,7 @@ int main() {
 		assert(randomx_reciprocal_fast(0xffffffff) == 9223372039002259456U);
 	});
 
-	runTest("Dataset initialization (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), []() {
+	runTest("Dataset initialization (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), []() {
 		initCache("test key 000");
 		uint64_t datasetItem[8];
 		randomx::initDatasetItem(cache, (uint8_t*)&datasetItem, 0);
@@ -138,7 +138,7 @@ int main() {
 		assert(datasetItem[0] == 0x145a5091f7853099);
 	});
 
-	runTest("Dataset initialization (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), []() {
+	runTest("Dataset initialization (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), []() {
 		initCache("test key 000");
 		randomx::JitCompiler jit;
 		jit.generateSuperscalarHash(cache->programs, cache->reciprocalCache);
@@ -465,7 +465,7 @@ int main() {
 		decoder.executeInstruction(ibc, pc, nullptr, config);
 		assert(reg.r[registerDst] == 1);
 	});
-	
+
 	runTest("IXOR_R (decode)", RANDOMX_FREQ_IXOR_R > 0, [&] {
 		randomx::Instruction instr;
 		instr.opcode = randomx::ceil_IXOR_R - 1;
@@ -985,15 +985,15 @@ int main() {
 		assert(equalsHex(hash, "c56414121acda1713c2f2a819d8ae38aed7c80c35c2a769298d34f03833cd5f1"));
 	};
 
-	runTest("Hash test 1a (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_a);
+	runTest("Hash test 1a (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_a);
 
-	runTest("Hash test 1b (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_b);
+	runTest("Hash test 1b (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_b);
 
-	runTest("Hash test 1c (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_c);
+	runTest("Hash test 1c (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_c);
 
-	runTest("Hash test 1d (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_d);
+	runTest("Hash test 1d (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_d);
 
-	runTest("Hash test 1e (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_e);
+	runTest("Hash test 1e (interpreter)", stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_e);
 
 	if (RANDOMX_HAVE_COMPILER) {
 		randomx_release_cache(cache);
@@ -1004,23 +1004,23 @@ int main() {
 		vm = randomx_create_vm(RANDOMX_FLAG_JIT, cache, nullptr);
 	}
 
-	runTest("Hash test 2a (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_a);
+	runTest("Hash test 2a (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_a);
 
-	runTest("Hash test 2b (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_b);
+	runTest("Hash test 2b (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_b);
 
-	runTest("Hash test 2c (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_c);
+	runTest("Hash test 2c (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_c);
 
-	runTest("Hash test 2d (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_d);
+	runTest("Hash test 2d (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_d);
 
-	runTest("Hash test 2e (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), test_e);
-	
+	runTest("Hash test 2e (compiler)", RANDOMX_HAVE_COMPILER && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), test_e);
+
 	randomx_destroy_vm(vm);
 	vm = nullptr;
 
 	randomx_release_cache(cache);
 	cache = randomx_alloc_cache(RANDOMX_FLAG_ARGON2_SSSE3);
 
-	runTest("Cache initialization: SSSE3", cache != nullptr && RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), []() {
+	runTest("Cache initialization: SSSE3", cache != nullptr && RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), []() {
 		initCache("test key 000");
 		uint64_t* cacheMemory = (uint64_t*)cache->memory;
 		assert(cacheMemory[0] == 0x191e0e1d23c02186);
@@ -1032,7 +1032,7 @@ int main() {
 		randomx_release_cache(cache);
 	cache = randomx_alloc_cache(RANDOMX_FLAG_ARGON2_AVX2);
 
-	runTest("Cache initialization: AVX2", cache != nullptr && RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "RandomARQ\x01"), []() {
+	runTest("Cache initialization: AVX2", cache != nullptr && RANDOMX_ARGON_ITERATIONS == 3 && RANDOMX_ARGON_LANES == 1 && RANDOMX_ARGON_MEMORY == 262144 && stringsEqual(RANDOMX_ARGON_SALT, "Arqma_Rx\x01"), []() {
 		initCache("test key 000");
 		uint64_t* cacheMemory = (uint64_t*)cache->memory;
 		assert(cacheMemory[0] == 0x191e0e1d23c02186);
