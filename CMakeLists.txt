@@ -169,9 +169,10 @@ if(ARM_ID STREQUAL "aarch64" OR ARM_ID STREQUAL "arm64" OR ARM_ID STREQUAL "armv
 endif()
 
 target_include_directories(randomx
-  PUBLIC
-  $<INSTALL_INTERFACE:>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
+    PUBLIC
+    $<INSTALL_INTERFACE:>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+)
 
 if(TARGET generate-asm)
   add_dependencies(randomx generate-asm)
